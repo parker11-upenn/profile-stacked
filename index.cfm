@@ -1,14 +1,5 @@
-<cfsetting showdebugoutput="no">
-<cfparam name="request.dsn" default="IncidentMaster">
-
-<cfquery name="QPersonList" datasource="#request.dsn#">
-    SELECT PersonID, FName, LName, ImageData
-    FROM dbo.Persons
-    WHERE PersonID IN (72211, 72036, 72322, 71547, 72343, 72585)
-    ORDER BY PersonID ASC
-
-    -- //use Penncard instead of personid
-</cfquery>
+<cfset userService = createObject("component", "UserService")>
+<cfset QPersonList = userService.getPersonList(personID="72211,72036,72322,71547,72343,72585")>
 
 <!DOCTYPE html>
 <html>
@@ -18,39 +9,8 @@
     <title>Overlapping Profile Stack</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .avatar-stack {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 55px);
-            margin-bottom: 30px;
-            padding: 20px;
-            min-height: 120px;
-            align-items: center;
-            background-color: #f8f9fa;
-            border-radius: 12px;
-        }
+    <link href="style.css" rel="stylesheet">
 
-        .tile-inner {
-            width: 87px; 
-            transition: all 0.2s ease-in-out;
-            display: none; 
-            position: relative;
-        }
-
-        .tile-image-area {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border: solid 5px white; 
-            border-radius: 50%;
-            background-color: #fff;
-        }
-
-        .tile-inner:hover {
-            transform: translateY(-8px);
-            z-index: 999 !important;
-        }
-    </style>
 </head>
 <body>
 
@@ -72,7 +32,7 @@
                          title="#encodeForHtml(QPersonList.FName & ' ' & QPersonList.LName)#">
                 <cfelse>
                     <div class="tile-image-area d-flex align-items-center justify-content-center bg-light">
-                        <i class="fa-solid fa-user text-secondary fa-2x"></i>
+                         <i class="fa-solid fa-circle-user text-secondary"></i>
                     </div>
                 </cfif>
             </div>
